@@ -12,4 +12,4 @@ class Suit(Enum):
 
 
 WINNING_CARD_INPUT_FILENAME = 'winning_card.in'
-WINNING_CARD_OUTPUT_FILENAME = "winning_card.out"
+WINNING_CARD_OUTPUT_FILENAME = 'winning_card.out'

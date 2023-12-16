@@ -1,3 +1,4 @@
+import os
 import re
 import json
 
@@ -75,7 +76,15 @@ def return_winning_card_from_winning_card_output_file():
 
     return winning_card
 
+def run_mace4():
 
+    commands = ["./Prover9Mace4/bin/mace4 -c -f " + WINNING_CARD_INPUT_FILENAME + " | ./Prover9Mace4/bin/interpformat portable > " + WINNING_CARD_OUTPUT_FILENAME]
+    for arg in commands:
+        if os.system(arg) != 0:
+            print("Failed to execute command " + arg)
+            exit(-1)
 
-setup_winning_card_input_file(Suit.RED, "rc9", "rc2", "rc3", "rca")
-print(return_winning_card_from_winning_card_output_file())
+def determine_which_card_wind():
+    setup_winning_card_input_file(Suit.RED, "bc10", "bca", "bc3", "bc9")
+    run_mace4()
+    return return_winning_card_from_winning_card_output_file()

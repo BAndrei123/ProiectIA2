@@ -1391,9 +1391,9 @@ tromf(rca).
 
 % set the played cards
 
-played_first(rc9).
-played(rc2).
-played(rc3).
-played(rca).
+played_first(bc10).
+played(bca).
+played(bc3).
+played(bc9).
 
 end_of_list.
