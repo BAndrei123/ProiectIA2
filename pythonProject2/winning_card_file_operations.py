@@ -88,3 +88,5 @@ def determine_which_card_wind():
     setup_winning_card_input_file(Suit.RED, "bc10", "bca", "bc3", "bc9")
     run_mace4()
     return return_winning_card_from_winning_card_output_file()
+
+determine_which_card_wind()

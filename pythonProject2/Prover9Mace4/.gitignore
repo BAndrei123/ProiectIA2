@@ -10,13 +10,11 @@ bin/fof-prover9
 bin/gen_trc_defs
 bin/idfilter
 bin/interpfilter
-bin/interpformat
 bin/isofilter
 bin/isofilter0
 bin/isofilter2
 bin/ladr_to_tptp
 bin/latfilter
-bin/mace4
 bin/miniscope
 bin/mirror-flip
 bin/multigoals2

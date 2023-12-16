@@ -3,7 +3,6 @@ import os
 import pygame
 import button
 pygame.init()
-import execute
 SCREEN_WIDTH = 1600
 SCREEN_HEIGHT = 800
 
