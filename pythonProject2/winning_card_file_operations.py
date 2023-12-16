@@ -2,7 +2,7 @@ import re
 import json
 
 from constants import CARDS, WINNING_CARD_INPUT_FILENAME, WINNING_CARD_OUTPUT_FILENAME, Suit
-def setup_winning_card_file(tromf, first_card, second_card, third_card, fourth_card):
+def setup_winning_card_input_file(tromf, first_card, second_card, third_card, fourth_card):
 
     filename = WINNING_CARD_INPUT_FILENAME
     with open(filename, 'r') as file:
@@ -46,7 +46,7 @@ def trump_to_trump_cards(trump, cards):
     return [card for card in cards if card[0] == trump.value]
 
 
-def parse_winning_card_file():
+def return_winning_card_from_winning_card_output_file():
 
     filename = WINNING_CARD_OUTPUT_FILENAME
 
@@ -76,5 +76,6 @@ def parse_winning_card_file():
     return winning_card
 
 
-setup_winning_card_file(Suit.RED, "rc9", "rc2", "rc3", "rca")
-print(parse_winning_card_file())
+
+setup_winning_card_input_file(Suit.RED, "rc9", "rc2", "rc3", "rca")
+print(return_winning_card_from_winning_card_output_file())
