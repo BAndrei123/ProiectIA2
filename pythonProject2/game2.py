@@ -3,7 +3,7 @@ from enum import Enum
 
 import pygame
 
-from pythonProject2.constants import CARDS, SCREEN_WIDTH, SCREEN_HEIGHT
+from constants import CARDS, SCREEN_WIDTH, SCREEN_HEIGHT
 
 
 class GameState(Enum):

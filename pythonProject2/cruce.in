@@ -907,6 +907,10 @@ your_hand(fc10).
 your_hand(bc2).
 your_hand(bc4).
 
+
+
+
+
 is_first(fc3).
 
 -i_place.

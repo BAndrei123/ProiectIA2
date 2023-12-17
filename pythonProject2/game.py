@@ -2,7 +2,7 @@ import os
 
 import pygame
 import button
-from pythonProject2.constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
 pygame.init()
 

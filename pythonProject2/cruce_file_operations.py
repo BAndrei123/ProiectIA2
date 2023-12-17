@@ -1,31 +1,53 @@
 import ast
 import os
 import re
+import random
+from constants import CARDS
 
-def change_file():
-    import random
-    from constants import cards
 
+def change_file(cards_in_hand, first_card, my_turn):
     filename = 'cruce.in'
 
-    random_card = random.choice(cards)
     # Read the content of the file
     with open(filename, 'r') as file:
         lines = file.readlines()
 
-    # Modify the specific line
+
     for i in range(len(lines)):
-        if 'is_first' in lines[i]:
-            lines[i] = f'is_first({random_card}).\n'
+        if 'is_first' in lines[i] and not my_turn:
+            lines[i] = f'is_first({first_card}).\n'
+            break
+        elif 'is_first' in lines[i] and my_turn:
+            lines[i] = f'%is_first({first_card}).\n'
             break
 
+        for i in range(len(lines)):
+            if '-i_place' in lines[i] and my_turn:
+                lines[i]='i_place.\n'
+                break
+            elif 'i_place' in lines[i] and not my_turn:
+                lines[i] = '-i_place.\n'
+                break
+
+    index = 0
+
+    for i in range(len(lines)):
+        if i>=902:
+            if index!=len(cards_in_hand):
+                lines[i] = f'your_hand({cards_in_hand[index]}).\n'
+                index += 1
+            elif i> (902+index-1) and i<908:
+                if 'your_hand' in lines[i]:
+                    lines[i]=''
     # Write the updated content back to the file
     with open(filename, 'w') as file:
         file.writelines(lines)
 
 
 def function():
-    commands = ["mace4 -c -f cruce.in | interpformat > cruce.out"]
+    to_return = []
+
+    commands = ["./Prover9Mace4/bin/mace4 -c -f cruce.in | ./Prover9Mace4/bin/interpformat > cruce.out"]
     for arg in commands:
         if os.system(arg) != 0:
             print("Failed to execute command " + arg)
@@ -76,21 +98,33 @@ def function():
         if tromf[18] == 1:
             print("Rosu\n")
         count = 1
-
+        print(your_hand_array)
         for i in range(0, 23):
             if first_card[i] == 1:
                 print("Prima carte jos este:")
                 print(carti[i])
 
         print("\nCartile din mana:")
-        for i in range(0, 23):
+        for i in range(0, 24):
+
             if your_hand_array[i] != 0:
+                print(i)
+                print(carti[i])
                 if to_place[i] == 0:
                     print(str(count) + ". " + carti[i] + " (nu poti pune cartea runda asta)")
+                    to_return.append((carti[i], False))
                     count += 1
                 else:
                     print(str(count) + ". " + carti[i] + " (cartea asta poate fi pusa)")
                     count += 1
+                    to_return.append((carti[i], True))
 
     else:
         print("No matching line found.")
+    print(to_return)
+
+
+
+cards_in_hand = ["bc10", "bc2","rc10","fc4","rc3"]
+change_file(cards_in_hand, "gc3", False)
+function()
