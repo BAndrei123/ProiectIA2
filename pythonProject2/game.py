@@ -2,9 +2,10 @@ import os
 
 import pygame
 import button
+from pythonProject2.constants import SCREEN_WIDTH, SCREEN_HEIGHT
+
 pygame.init()
-SCREEN_WIDTH = 1600
-SCREEN_HEIGHT = 800
+
 
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 pygame.display.set_caption("CRUCE")
