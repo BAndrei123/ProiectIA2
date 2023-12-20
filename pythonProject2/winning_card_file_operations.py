@@ -1,15 +1,18 @@
 import os
 import re
 import json
+import subprocess
 
-from constants import CARDS, WINNING_CARD_INPUT_FILENAME, WINNING_CARD_OUTPUT_FILENAME, Suit
+from constants import CARDS, WINNING_CARD_INPUT_FILENAME, WINNING_CARD_OUTPUT_FILENAME
+
+
 def setup_winning_card_input_file(tromf, first_card, second_card, third_card, fourth_card):
 
     filename = WINNING_CARD_INPUT_FILENAME
     with open(filename, 'r') as file:
         lines = file.readlines()
 
-    cards = CARDS
+    cards = CARDS.copy()
     trumps = trump_to_trump_cards(tromf, cards)
     not_trumps = [card for card in cards if card not in trumps]
     played_cards = [second_card, third_card, fourth_card]
@@ -77,16 +80,17 @@ def return_winning_card_from_winning_card_output_file():
     return winning_card
 
 def run_mace4():
+    commands = [
+        "./Prover9Mace4/bin/mace4 -c -f " + WINNING_CARD_INPUT_FILENAME + " | ./Prover9Mace4/bin/interpformat portable > " + WINNING_CARD_OUTPUT_FILENAME]
 
-    commands = ["./Prover9Mace4/bin/mace4 -c -f " + WINNING_CARD_INPUT_FILENAME + " | ./Prover9Mace4/bin/interpformat portable > " + WINNING_CARD_OUTPUT_FILENAME]
+    # Execute the command silently
     for arg in commands:
-        if os.system(arg) != 0:
+        result = subprocess.run(arg, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if result.returncode != 0:
             print("Failed to execute command " + arg)
             exit(-1)
 
-def determine_which_card_wind():
-    setup_winning_card_input_file(Suit.RED, "bc10", "bca", "bc3", "bc9")
+def determine_which_card_wins(tromf, first_card, second_card, third_card, fourth_card):
+    setup_winning_card_input_file(tromf, first_card, second_card, third_card, fourth_card)
     run_mace4()
     return return_winning_card_from_winning_card_output_file()
-
-determine_which_card_wind()

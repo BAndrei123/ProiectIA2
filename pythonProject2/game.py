@@ -1,131 +1,239 @@
-import os
-
-import pygame
+import random
 import button
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
+import pygame
 
-pygame.init()
+from constants import CARDS, SCREEN_WIDTH, SCREEN_HEIGHT, IMAGES, CARDSFULL, Suit
+from cruce_file_operations import change_file, interpret_Output
+from pythonProject2.winning_card_file_operations import determine_which_card_wins
 
 
-screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-pygame.display.set_caption("CRUCE")
-font=pygame.font.SysFont("arialblack",40)
-TEXT_COL = (255,255,255)
+class UI:
+    window = None
+    cardNonebutton = None
+    winning_player_text = None
+    winning_player_text_rectangle = None
+    font = None
+    trump_to_img = {Suit.RED: "resources/trumpimages/red.png",
+                    Suit.GREEN: "resources/trumpimages/green.png",
+                    Suit.ACORN: "resources/trumpimages/acorn.png",
+                    Suit.VAN: "resources/trumpimages/van.png",
+                    }
 
-doiderosu = pygame.image.load("cartiCruce/2rosu.png").convert_alpha()
-doiderosubutton = button.Button(50,500,doiderosu,1)
+    def __init__(self, width, height, title):
+        self.window = pygame.display.set_mode((width, height))
+        pygame.display.set_caption(title)
+        self.initElements()
 
-doidebata = pygame.image.load("cartiCruce/2bata.png").convert_alpha()
-doidebatabutton = button.Button(180,500,doidebata,1)
+    def initElements(self):
+        cardNone = pygame.image.load("resources/carticruce/none.png").convert_alpha()
+        self.cardNonebutton = button.Button(10, 100, cardNone, 1)
 
-doideghinda = pygame.image.load("cartiCruce/2ghinda.png").convert_alpha()
-doideghindabutton = button.Button(310,500,doideghinda,1)
+        self.font = pygame.font.Font("resources/Seagram tfb.ttf", 50)
+        self.winning_player_text = self.font.render("", True, (255, 255, 255))
+        self.winning_player_text_rectangle = self.winning_player_text.get_rect(
+            center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 200))
 
-doideverde = pygame.image.load("cartiCruce/2verde.png").convert_alpha()
-doideverdebutton = button.Button(440,500,doideverde,1)
+    def updateWinningPlayerText(self, msg):
+        self.winning_player_text = self.font.render(msg, True, (255, 255, 255))
+        self.winning_player_text_rectangle = self.winning_player_text.get_rect(
+            center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 200))
 
-treiderosu = pygame.image.load("cartiCruce/3rosu.png").convert_alpha()
-treiderosubutton = button.Button(570,500,treiderosu,1)
+    def getTrumpImage(self, trump):
+        return pygame.transform.scale(pygame.image.load(self.trump_to_img[trump]), (80, 80))
 
-treidebata = pygame.image.load("cartiCruce/3bata.png").convert_alpha()
-treidebatabutton = button.Button(700,500,treidebata,1)
 
-treideghinda = pygame.image.load("cartiCruce/3ghinda.png").convert_alpha()
-treideghindabutton = button.Button(830,500,treideghinda,1)
+class GameState:
+    deck = None
+    played_cards = None
+    player = None
+    trump = None
+    first_card = None
+    output_info = None
+    winner = None
 
-treideverde = pygame.image.load("cartiCruce/3verde.png").convert_alpha()
-treideverdebutton = button.Button(960,500,treideverde,1)
+    def __init__(self, player):
+        self.deck = Deck()
+        self.player = player
+        self.played_cards = []
+        self.output_info = []
 
-patruderosu = pygame.image.load("cartiCruce/4rosu.png").convert_alpha()
-patruderosubutton = button.Button(1090,500,patruderosu,1)
+    def initGameState(self):
+        self.deck.shuffle()
+        self.trump = random.choice(list(Suit))
+        print(self.trump)
+        self.player.hand = self.deck.deal_cards(6)
+        self.played_cards = self.deck.deal_cards(3)
+        self.first_card = self.played_cards[0]
 
-patrudebata = pygame.image.load("cartiCruce/4bata.png").convert_alpha()
-patrudebatabutton = button.Button(1220,500,patrudebata,1)
+    def determineWhichCardsArePlaceable(self):
+        change_file(self.player.hand, self.first_card, self.trump)
+        allow = interpret_Output()
 
-patrudeghinda = pygame.image.load("cartiCruce/4ghinda.png").convert_alpha()
-patrudeghindabutton = button.Button(1350,500,patrudeghinda,1)
+        img = []
+        for i in self.player.hand:
+            for j in CARDSFULL:
+                if i == j:
+                    img.append(IMAGES[CARDSFULL.index(j)])
 
-patrudeverde = pygame.image.load("cartiCruce/4verde.png").convert_alpha()
-patrudeverdebutton = button.Button(1480,500,patrudeverde,1)
+        # allowed:
+        allowed_cards = []
+        for i in self.player.hand:
+            for j in allow:
+                if i == j[0]:
+                    print(j[0])
+                    if not j[1]:
+                        allowed_cards.append("resources/carticruce/close.png")
+                    else:
+                        allowed_cards.append("resources/carticruce/check.png")
 
-nouaderosu = pygame.image.load("cartiCruce/9rosu.png").convert_alpha()
-nouaderosubutton = button.Button(50,330,nouaderosu,1)
+        in_hand_card_screen_pos = [(440, 760), (570, 760), (700, 760), (830, 760), (960, 760), (1090, 760)]
 
-nouadebata = pygame.image.load("cartiCruce/9bata.png").convert_alpha()
-nouadebatabutton = button.Button(180,330,nouadebata,1)
+        for i in range(0, len(allowed_cards)):
+            self.output_info.append((img[i], allowed_cards[i], in_hand_card_screen_pos[i]))
 
-nouadeghinda = pygame.image.load("cartiCruce/9ghinda.png").convert_alpha()
-nouadeghindabutton = button.Button(310,330,nouadeghinda,1)
 
-nouadeverde = pygame.image.load("cartiCruce/9rosu.png").convert_alpha()
-nouadeverdebutton = button.Button(440,330,nouadeverde,1)
+class Game:
+    state = None
+    gameUI = None
 
-zecederosu = pygame.image.load("cartiCruce/10rosu.png").convert_alpha()
-zecederosubutton = button.Button(570,330,zecederosu,1)
+    def __init__(self):
+        self.state = GameState(Player())
+        self.gameUI = UI(SCREEN_WIDTH, SCREEN_HEIGHT, "CRUCE")
+        self.state.initGameState()
 
-zecedebata = pygame.image.load("cartiCruce/10bata.png").convert_alpha()
-zecedebatabutton = button.Button(700,330,zecedebata,1)
+    def updateWindow(self):
+        self.gameUI.window.fill((52, 78, 91))
 
-zecedeghinda = pygame.image.load("cartiCruce/10ghinda.png").convert_alpha()
-zecedeghindabutton = button.Button(830,330,zecedeghinda,1)
+        # trump
+        self.gameUI.window.blit(self.gameUI.getTrumpImage(self.state.trump), (430, 360))
 
-zecedeverde = pygame.image.load("cartiCruce/10rosu.png").convert_alpha()
-zecedeverdebutton = button.Button(960,330,zecedeverde,1)
+        # left
+        self.gameUI.cardNonebutton.draw(self.gameUI.window)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 10, 200)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 10, 300)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 10, 400)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 10, 500)
 
-asderosu = pygame.image.load("cartiCruce/asrosu.png").convert_alpha()
-asderosubutton = button.Button(1090,330,asderosu,1)
+        # up
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 590, 10)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 700, 10)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 810, 10)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 920, 10)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 1030, 10)
 
-asdebata = pygame.image.load("cartiCruce/asbata.png").convert_alpha()
-asdebatabutton = button.Button(1220,330,asdebata,1)
+        # right
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 1710, 100)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 1710, 200)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 1710, 300)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 1710, 400)
+        self.gameUI.cardNonebutton.drawAt(self.gameUI.window, 1710, 500)
 
-asdeghinda = pygame.image.load("cartiCruce/asghinda.png").convert_alpha()
-asdeghindabutton = button.Button(1350,330,asdeghinda,1)
+        # CARDS_IN_HAND
+        for i in range(0, len(self.state.output_info)):
+            image = pygame.image.load("resources/carticruce/" + self.state.output_info[i][0]).convert_alpha()
+            imgButton = button.Button(self.state.output_info[i][2][0], self.state.output_info[i][2][1], image, 1)
 
-asdeverde = pygame.image.load("cartiCruce/asverde.png").convert_alpha()
-asdeverdebutton = button.Button(1480,330,asdeverde,1)
+            # allowed or not
+            imgAllowed = pygame.image.load(self.state.output_info[i][1]).convert_alpha()
+            imgAllowed1Button = button.Button(self.state.output_info[i][2][0] + 40,
+                                              self.state.output_info[i][2][1] - 60, imgAllowed, 1)
+            imgAllowed1Button.draw(self.gameUI.window)
 
-def draw_text(text,font,text_col,x,y):
-        img = font.render(text,True,text_col)
-        screen.blit(img,(x,y))
+            if imgButton.draw(self.gameUI.window) and self.state.output_info[i][
+                1] == "resources/carticruce/check.png" and len(
+                    self.state.played_cards) != 4:
+                self.placeDownCard(i)
 
-run = True
-while run:
-    screen.fill((52,78,91))
-    doiderosubutton.draw(screen)
-    doidebatabutton.draw(screen)
-    doideghindabutton.draw(screen)
-    doideverdebutton.draw(screen)
+                self.determineRoundWinner()
+                break
 
-    treiderosubutton.draw(screen)
-    treidebatabutton.draw(screen)
-    treideghindabutton.draw(screen)
-    treideverdebutton.draw(screen)
+        # cards_down
+        img_cards_down = []
+        for i in self.state.played_cards:
+            for j in CARDSFULL:
+                if i == j:
+                    img_cards_down.append(IMAGES[CARDSFULL.index(j)])
 
-    patruderosubutton.draw(screen)
-    patrudebatabutton.draw(screen)
-    patrudeghindabutton.draw(screen)
-    patrudeverdebutton.draw(screen)
+        imgDown1 = pygame.image.load("resources/carticruce/" + img_cards_down[0]).convert_alpha()
+        imgDownButton = button.Button(580, 360, imgDown1, 1)
+        imgDownButton.draw(self.gameUI.window)
 
-    nouaderosubutton.draw(screen)
-    nouadebatabutton.draw(screen)
-    nouadeghindabutton.draw(screen)
-    nouadeverdebutton.draw(screen)
+        imgDown2 = pygame.image.load("resources/carticruce/" + img_cards_down[1]).convert_alpha()
+        imgDown2Button = button.Button(730, 360, imgDown2, 1)
+        imgDown2Button.draw(self.gameUI.window)
 
-    zecederosubutton.draw(screen)
-    zecedebatabutton.draw(screen)
-    zecedeghindabutton.draw(screen)
-    zecedeverdebutton.draw(screen)
+        imgDown3 = pygame.image.load("resources/carticruce/" + img_cards_down[2]).convert_alpha()
+        imgDown3Button = button.Button(880, 360, imgDown3, 1)
+        imgDown3Button.draw(self.gameUI.window)
 
-    asderosubutton.draw(screen)
-    asdebatabutton.draw(screen)
-    asdeghindabutton.draw(screen)
-    asdeverdebutton.draw(screen)
-    commands = ["mace4 -c -f cruce.in | interpformat > cruce.out"]
-    for arg in commands:
-        if os.system(arg) != 0:
-            print("Failed to execute command " + arg)
-    for event in pygame.event.get(()):
-        if event.type == pygame.QUIT:
-            run = False
-    pygame.display.update()
-pygame.quit()
+        if len(img_cards_down) == 4:
+            imgDown4 = pygame.image.load("resources/carticruce/" + img_cards_down[3]).convert_alpha()
+            imgDown4Button = button.Button(1030, 360, imgDown4, 1)
+            imgDown4Button.draw(self.gameUI.window)
+
+        if self.state.winner is not None:
+            winning_player_index = self.state.played_cards.index(self.state.winner)
+            if winning_player_index == 3:
+                msg = "You won! Congrats!"
+            else:
+                msg = "Player " + str(winning_player_index + 1) + " won!"
+            self.gameUI.updateWinningPlayerText(msg)
+            self.gameUI.window.blit(self.gameUI.winning_player_text, self.gameUI.winning_player_text_rectangle)
+
+    def run(self):
+
+        self.state.determineWhichCardsArePlaceable()
+
+        running = True
+        while running:
+            # poll for events
+            # pygame.QUIT event means the user clicked X to close your window
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            print("cartile jucatorului")
+            print(self.state.player.hand)
+
+            self.updateWindow()
+            pygame.display.flip()
+
+    def placeDownCard(self, i):
+        self.state.played_cards.append(self.state.player.hand[i])
+        self.state.player.hand.remove(self.state.player.hand[i])
+        self.state.output_info.pop(i)
+
+    def determineRoundWinner(self):
+        self.state.winner = determine_which_card_wins(self.state.trump, *self.state.played_cards)
+
+
+class Deck:
+    cards = None
+
+    def __init__(self):
+        self.cards = CARDS.copy()
+
+    def shuffle(self):
+        random.shuffle(self.cards)
+
+    def deal_cards(self, number_of_cards):
+        cards = []
+        for _ in range(0, number_of_cards):
+            cards.append(self.cards.pop())
+        return cards
+
+
+class Player:
+    hand = None
+
+    def __init__(self):
+        self.hand = []
+
+
+if __name__ == "__main__":
+    pygame.init()
+
+    gameInstance = Game()
+    gameInstance.run()
+
+    pygame.quit()

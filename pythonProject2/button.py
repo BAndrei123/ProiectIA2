@@ -2,7 +2,7 @@ import pygame
 
 
 # button class
-class Button():
+class Button:
     def __init__(self, x, y, image, scale):
         width = image.get_width()
         height = image.get_height()
@@ -29,3 +29,6 @@ class Button():
         surface.blit(self.image, (self.rect.x, self.rect.y))
 
         return action
+
+    def drawAt(self, surface, x, y):
+        surface.blit(self.image, (x, y))

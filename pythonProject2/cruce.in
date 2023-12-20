@@ -865,11 +865,11 @@ right_neighbour(bc10,bca).
 
 % define the game state
 
-tromf(fc9).
+tromf(fc10).
+tromf(fc4).
 tromf(fc2).
 tromf(fc3).
-tromf(fc4).
-tromf(fc10).
+tromf(fc9).
 tromf(fca).
 
 ghinda(gc9).
@@ -900,24 +900,16 @@ frunza(fc4).
 frunza(fc10).
 frunza(fca).
 
-your_hand(rc9).
+your_hand(gc10).
+your_hand(gca).
+your_hand(gc9).
+your_hand(bc10).
+your_hand(rc2).
 your_hand(rc3).
-your_hand(bc9).
-your_hand(fc10).
-your_hand(bc2).
-your_hand(bc4).
-
-
-
-
-
-is_first(fc3).
-
--i_place.
 
 % define rules
 
-is_first(x) & tromf(x) & tromf(y) -> must_place(y).
+is_first(rca).
 
 is_first(x) & ghinda(x) & ghinda(y) -> must_place(y).
 
@@ -941,10 +933,9 @@ your_hand(x) & tromf(x) -> tromf_in_hand.
 %daca nu am niciun tromf in mana si nicio carte de culoarea ceruta atunci pot pune orice carte din mana
 -tromf_in_hand & -color_in_hand & -unlocked(x) & your_hand(x) -> unlocked(x).
 
-i_place -> unlocked(x).
+-i_place.
 
 end_of_list.
-
 
 
 
