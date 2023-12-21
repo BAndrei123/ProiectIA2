@@ -3,7 +3,7 @@ import re
 import json
 import subprocess
 
-from constants import CARDS, WINNING_CARD_INPUT_FILENAME, WINNING_CARD_OUTPUT_FILENAME
+from constants import CARDS, WINNING_CARD_INPUT_FILENAME, WINNING_CARD_OUTPUT_FILENAME,Suit
 
 
 def setup_winning_card_input_file(tromf, first_card, second_card, third_card, fourth_card):
@@ -94,3 +94,4 @@ def determine_which_card_wins(tromf, first_card, second_card, third_card, fourth
     setup_winning_card_input_file(tromf, first_card, second_card, third_card, fourth_card)
     run_mace4()
     return return_winning_card_from_winning_card_output_file()
+

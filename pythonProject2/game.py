@@ -58,6 +58,11 @@ class GameState:
         self.output_info = []
 
     def initGameState(self):
+        self.winner = None
+        self.deck = Deck()
+        self.played_cards = []
+        self.player.hand = []
+        self.output_info = []
         self.deck.shuffle()
         self.trump = random.choice(list(Suit))
         print(self.trump)
@@ -179,6 +184,12 @@ class Game:
                 msg = "Player " + str(winning_player_index + 1) + " won!"
             self.gameUI.updateWinningPlayerText(msg)
             self.gameUI.window.blit(self.gameUI.winning_player_text, self.gameUI.winning_player_text_rectangle)
+            #restart button
+            imgRestart = pygame.image.load("resources/buttonimages/restart.png").convert_alpha()
+            imgRestartButton = button.Button(1230, 360, imgRestart, 1)
+            if imgRestartButton.draw(self.gameUI.window):
+                GameState.initGameState(self.state)
+                self.state.determineWhichCardsArePlaceable()
 
     def run(self):
 

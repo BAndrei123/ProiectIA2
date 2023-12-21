@@ -1361,12 +1361,12 @@ played(x) & played(y) & same_color(x,y) & is_bigger(x,y) -> nu_duce(y).
 
 % set the tromfs
 
-tromf(fc10).
-tromf(fc2).
-tromf(fc4).
-tromf(fc3).
-tromf(fc9).
-tromf(fca).
+tromf(rc10).
+tromf(rc2).
+tromf(rc4).
+tromf(rc3).
+tromf(rc9).
+tromf(rca).
 
 -tromf(bc10).
 -tromf(bc2).
@@ -1375,6 +1375,13 @@ tromf(fca).
 -tromf(bc9).
 -tromf(bca).
 
+-tromf(fc10).
+-tromf(fc2).
+-tromf(fc4).
+-tromf(fc3).
+-tromf(fc9).
+-tromf(fca).
+
 -tromf(gc10).
 -tromf(gc2).
 -tromf(gc4).
@@ -1382,18 +1389,11 @@ tromf(fca).
 -tromf(gc9).
 -tromf(gca).
 
--tromf(rc10).
--tromf(rc2).
--tromf(rc4).
--tromf(rc3).
--tromf(rc9).
--tromf(rca).
-
 % set the played cards
 
-played_first(rc9).
-played(fc2).
-played(gc2).
-played(rca).
+played_first(rc2).
+played(gc10).
+played(rc3).
+played(rc4).
 
 end_of_list.

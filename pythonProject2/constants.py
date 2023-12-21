@@ -4,10 +4,10 @@ CARDS = ["bc10", "bc2", "bc4", "bc3", "bc9", "bca", "fc10", "fc2", "fc4", "fc3",
          "gc3", "gc9", "gca", "rc10", "rc2", "rc4", "rc3", "rc9", "rca"]
 CARDSFULL = ["bc10", "bc4", "bc2", "bc3", "bc9", "bca", "fc10", "fc4", "fc2", "fc3", "fc9", "fca", "gc10", "gc4", "gc2",
          "gc3", "gc9", "gca", "rc10", "rc4", "rc2", "rc3", "rc9", "rca"]
-IMAGES = ["10bata.png", "2bata.png", "3bata.png", "4bata.png", "9bata.png", "asbata.png", "10verde.png"
-    , "2verde.png" , "3verde.png", "4verde.png", "9verde.png", "asverde.png"
-    ,"10ghinda.png","2ghinda.png","3ghinda.png","4ghinda.png","9ghinda.png","asghinda.png"
-    ,"10rosu.png","2rosu.png","3rosu.png","4rosu.png","9rosu.png","asrosu.png"]
+IMAGES = ["10bata.png", "4bata.png", "2bata.png", "3bata.png", "9bata.png", "asbata.png", "10verde.png"
+    , "4verde.png" , "2verde.png", "3verde.png", "9verde.png", "asverde.png"
+    ,"10ghinda.png","4ghinda.png","2ghinda.png","3ghinda.png","9ghinda.png","asghinda.png"
+    ,"10rosu.png","4rosu.png","2rosu.png","3rosu.png","9rosu.png","asrosu.png"]
 
 
 class Suit(Enum):

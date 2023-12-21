@@ -865,12 +865,12 @@ right_neighbour(bc10,bca).
 
 % define the game state
 
-tromf(fc10).
-tromf(fc4).
-tromf(fc2).
-tromf(fc3).
-tromf(fc9).
-tromf(fca).
+tromf(rc10).
+tromf(rc4).
+tromf(rc2).
+tromf(rc3).
+tromf(rc9).
+tromf(rca).
 
 ghinda(gc9).
 ghinda(gc2).
@@ -900,16 +900,16 @@ frunza(fc4).
 frunza(fc10).
 frunza(fca).
 
-your_hand(gca).
-your_hand(fc3).
-your_hand(fc10).
+your_hand(fc2).
+your_hand(bc4).
+your_hand(rc4).
 your_hand(bc3).
-your_hand(gc4).
-your_hand(rca).
+your_hand(gc9).
+your_hand(gca).
 
 % define rules
 
-is_first(rc9).
+is_first(rc2).
 
 is_first(x) & ghinda(x) & ghinda(y) -> must_place(y).
 
