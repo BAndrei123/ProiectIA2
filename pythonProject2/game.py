@@ -4,7 +4,7 @@ import pygame
 
 from constants import CARDS, SCREEN_WIDTH, SCREEN_HEIGHT, IMAGES, CARDSFULL, Suit
 from cruce_file_operations import change_file, interpret_Output
-from pythonProject2.winning_card_file_operations import determine_which_card_wins
+from winning_card_file_operations import determine_which_card_wins
 
 
 class UI:

@@ -900,16 +900,16 @@ frunza(fc4).
 frunza(fc10).
 frunza(fca).
 
-your_hand(gc10).
 your_hand(gca).
-your_hand(gc9).
-your_hand(bc10).
-your_hand(rc2).
-your_hand(rc3).
+your_hand(fc3).
+your_hand(fc10).
+your_hand(bc3).
+your_hand(gc4).
+your_hand(rca).
 
 % define rules
 
-is_first(rca).
+is_first(rc9).
 
 is_first(x) & ghinda(x) & ghinda(y) -> must_place(y).
 
